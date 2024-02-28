@@ -14,7 +14,11 @@ class HomeView extends GetView<HomeController> {
         title: const Text('жмай'),
         centerTitle: true,
       ),
-      body: Center(
+      body: Container(
+        decoration: BoxDecoration(
+         color: Color.fromARGB(255, 208, 18, 214),
+        ), 
+        child: Center(
         child: GestureDetector(
           onTap: () => controller.changeActiveIndex(),
           child: Card(
@@ -28,6 +32,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );
