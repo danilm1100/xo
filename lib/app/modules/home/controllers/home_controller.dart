@@ -1,26 +1,38 @@
+import 'package:xo/app/data/emoji_data.dart';
 import 'package:get/get.dart';
-import 'package:xo/app/services/storage_service.dart';
+import 'package:xo/app/model/emojiicon.dart';
+import 'package:xo/app/services/user_service.dart';
 
 class HomeController extends GetxController {
-  final storageService = Get.find<StorageService>();
-  final index = 0.obs;
+  var _userService = Get.find<UserService>();
 
-  String getEmoji(){
-    return emojiList[index.value];
+  var activeIndex = 0.obs;
+  var emojiList = EmojiData.emojiList.obs;
+
+
+  Emojiicon get getActiveEmoji {
+    return Emojiicon(data:emojiList[activeIndex.value]);
   }
 
-  void changeIndex(){
-    if (index + 1 < emojiList.lenght){
-      index.value++;
+  changeActiveIndex() {
+    if(activeIndex.value + 1 < emojiList.length) {
+      activeIndex.value++;
     } else {
-      index.value = 0;
+      activeIndex.value = 0;
     }
-    storageService.writeIndex(index.value);
+    _userService.saveData(getActiveEmoji);
+    print(activeIndex.value);
+  }
+
+  initializeIndex() {
+    var storedData = _userService.userData;
+    print("INIT $storedData");
+    activeIndex.value = emojiList.indexOf(storedData?.data);
   }
 
   @override
-  void onInit(){
+  void onInit() {
     super.onInit();
-    index.value = storageService.readIndex();
+    initializeIndex();
   }
 }
